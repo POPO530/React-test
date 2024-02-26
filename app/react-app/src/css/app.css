@@ -1,118 +1,118 @@
-.button:hover {
-  background-color: #0056b3;
-}
-
 /* ヘッダー全体のスタイル */
 .app-header {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 0;
+  background-color: #333; /* 背景色 */
+  color: #fff; /* テキスト色 */
+  padding: 10px 0; /* 上下の余白 */
 }
 
 /* ナビゲーションメニューのスタイル */
 .nav-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+  list-style-type: none; /* リストスタイルをなしに */
+  padding: 0; /* 内側の余白 */
+  margin: 0; /* 外側の余白 */
 }
 
 .nav-list li {
-  display: inline;
-  margin-right: 20px;
+  display: inline; /* リストアイテムをインライン表示 */
+  margin-right: 20px; /* 右側の余白 */
 }
 
 .nav-list li:last-child {
-  margin-right: 0;
+  margin-right: 0; /* 最後のリストアイテムには右側の余白を適用しない */
 }
 
 /* リンクのスタイル */
 .nav-link {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  color: #fff; /* テキスト色 */
+  text-decoration: none; /* 下線をなしに */
+  transition: color 0.3s ease; /* カラー変化のアニメーション */
 }
 
 .nav-link:hover {
-  color: #ff0;
+  color: #ff0; /* マウスオーバー時のテキスト色 */
 }
 
 /* 選択されたリンクのスタイル */
 .nav-link.active {
-  font-weight: bold;
+  font-weight: bold; /* 太字に */
 }
 
+/* トップ画面、設定画面、ゲーム画面のスタイル */
 .top-screen, .setting-screen, .game {
-  background-color: #f0f0f0;
-  padding: 20px;
+  background-color: #f0f0f0; /* 背景色 */
+  padding: 20px; /* 内側の余白 */
 }
 
 .location-weather-info {
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* 下側のマージン */
 }
 
+/* ボタンのスタイル */
 .link-button, .setting-button, .toggle-button, .jump-button {
-  display: block;
-  width: 200px;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 18px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
+  display: block; /* ブロック要素として表示 */
+  width: 200px; /* 幅 */
+  padding: 10px; /* パディング */
+  margin-bottom: 10px; /* 下側のマージン */
+  text-align: center; /* テキストの中央揃え */
+  font-size: 18px; /* フォントサイズ */
+  color: #fff; /* テキスト色 */
+  background-color: #007bff; /* ボタンの背景色 */
+  border: none; /* 枠線なし */
+  border-radius: 5px; /* 角丸 */
+  cursor: pointer; /* マウスオーバー時のカーソル */
+  text-decoration: none; /* 下線なし */
 }
 
+/* ボタンがホバーされたときの背景色を変更 */
+.link-button:hover, .setting-button:hover, .toggle-button:hover, .jump-button:hover {
+  background-color: #0056b3;
+}
+
+
+/* アプリケーションコンテナのスタイル */
 .app-container {
-  padding: 20px;
+  padding: 20px; /* 内側の余白 */
 }
 
+/* 四角形のスタイル */
 .square {
-  background-color: #fff;
-  border: 2px solid #999;
-  color: #333;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 54px;
-  width: 54px;
-  margin: 2px;
-  padding: 0;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  background-color: #fff; /* 背景色 */
+  border: 2px solid #999; /* 枠線 */
+  color: #333; /* テキスト色 */
+  font-size: 24px; /* フォントサイズ */
+  font-weight: bold; /* フォントの太さ */
+  line-height: 34px; /* 行の高さ */
+  height: 54px; /* 高さ */
+  width: 54px; /* 幅 */
+  margin: 2px; /* マージン */
+  padding: 0; /* パディング */
+  text-align: center; /* テキストの中央揃え */
+  cursor: pointer; /* マウスオーバー時のカーソル */
+  transition: background-color 0.3s ease; /* 背景色の変化をアニメーション */
 }
 
 .square:focus {
-  outline: none;
+  outline: none; /* フォーカス時の枠線を消す */
 }
 
 .square:hover {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* マウスホバー時の背景色 */
 }
 
 /* 盤の行のスタイル */
 .board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-/* ゲーム全体のスタイル */
-.game {
-  display: flex;
-  flex-direction: row;
+  clear: both; /* 浮動解除 */
+  content: ""; /* コンテンツなし */
+  display: table; /* テーブルとして表示 */
 }
 
 /* ゲーム情報のスタイル */
 .game-info {
-  margin-left: 20px;
+  margin-left: 20px; /* 左側のマージン */
 }
 
 /* フッターのスタイル */
 .footer {
-  background-color: aqua;
-  padding: 10px 0;
+  background-color: aqua; /* 背景色 */
+  padding: 10px 0; /* 上下の余白 */
 }

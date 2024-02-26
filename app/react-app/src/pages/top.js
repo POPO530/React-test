@@ -3,24 +3,18 @@ import axios from 'axios'; // axiosをインポート
 import { Link } from "react-router-dom"; // リンクを作成するためのインポート
 
 function Top({ cityInfo }) {
-  // 天気データと場所の名前を管理するステートを定義
   const [weatherData, setWeatherData] = useState([]);
   const [locationName, setLocationName] = useState(cityInfo.locationName || "");
 
-  // useEffectフックを使用して、天気データと場所の名前を取得
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Open Meteo APIから天気データを取得
         const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${cityInfo.latitude}&longitude=${cityInfo.longitude}&hourly=weathercode&timezone=Asia%2FTokyo&forecast_days=1`);
-
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
-
         const data = response.data;
 
-        // 今日の日付と時刻を取得
         const today = new Date();
         const year = today.getFullYear();
         let month = today.getMonth() + 1;
@@ -31,7 +25,6 @@ function Top({ cityInfo }) {
         hour = hour < 10 ? "0" + hour : hour;
         const todayDate = `${year}-${month}-${day}T${hour}:00`;
 
-        // 天気情報のマップ
         const weatherMap = {
           "Unknown": "晴天",
           1: "晴れ", 2: "時々曇り", 3: "曇り",
@@ -62,7 +55,6 @@ function Top({ cityInfo }) {
 
     const fetchLocationName = async () => {
       try {
-        // OpenStreetMap APIから場所の名前を取得
         const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${cityInfo.latitude}&lon=${cityInfo.longitude}`);
         if (response.status !== 200) {
           throw new Error('Failed to fetch location data');
@@ -74,27 +66,23 @@ function Top({ cityInfo }) {
       }
     };
 
-    // ユーザーの現在地の緯度と経度があれば、データを取得
     if (cityInfo.latitude && cityInfo.longitude) {
       fetchData();
       fetchLocationName();
     }
-  }, [cityInfo]); // cityInfoが変更されるたびに実行
+  }, [cityInfo]);
 
   return (
     <div className="top-screen">
       <h1>トップ画面</h1>
       <div className="location-weather-info">
-        {/* 場所の名前と天気情報の表示 */}
         <h2>場所の名前: {locationName}</h2>
         {weatherData.map((weather, index) => (
           <p key={index}>{weather.type} 日付・時刻: {weather.date}</p>
         ))}
       </div>
-        {/* 設定画面へのリンク */}
-        <Link to="setting" className="link-button">setting画面へ</Link>
-        {/* ゲーム画面へのリンク */}
-        <Link to="game" className="link-button">game画面へ</Link>
+      <Link to="setting" className="link-button">setting画面へ</Link>
+      <Link to="game" className="link-button">game画面へ</Link>
     </div>
   );
 }
