@@ -83,6 +83,7 @@ function Top({ cityInfo }) { // Topコンポーネントを定義し、cityInfo�
       </div>
       <Link to="setting" className="link-button">setting画面へ</Link> {/* 設定画面へのリンク */}
       <Link to="game" className="link-button">game画面へ</Link> {/* ゲーム画面へのリンク */}
+      <Link to="1kuji" className="link-button">1番くじ画面へ</Link> {/* 1番くじ画面へのリンク */}
     </div>
   );
 }

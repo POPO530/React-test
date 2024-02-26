@@ -5,6 +5,7 @@ import Footer from './pages/footer'; // Footerページのコンポーネント�
 import Top from './pages/top'; // Topページのコンポーネントをインポート
 import Setting from './pages/setting'; // Settingページのコンポーネントをインポート
 import Game from './pages/game'; // Gameページのコンポーネントをインポート
+import Kuji from './pages/kuji'; // Kujiページのコンポーネントをインポート
 import './css/app.css'; // アプリケーションのCSSスタイルをインポート
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
           <Route path="setting" element={<Setting setCityInfo={setCityInfo} cityInfo={cityInfo} />} />
           {/* パスが"game"の場合、Gameコンポーネントを要素としてレンダリング */}
           <Route path="game" element={<Game />} />
+          {/* パスが"1kuji"の場合、Kujiコンポーネントを要素としてレンダリング */}
+          <Route path="1kuji" element={<Kuji />} />
         </Routes>
       </BrowserRouter>
       <Footer />
