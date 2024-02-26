@@ -1,0 +1,118 @@
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* ヘッダー全体のスタイル */
+.app-header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+}
+
+/* ナビゲーションメニューのスタイル */
+.nav-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+  display: inline;
+  margin-right: 20px;
+}
+
+.nav-list li:last-child {
+  margin-right: 0;
+}
+
+/* リンクのスタイル */
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ff0;
+}
+
+/* 選択されたリンクのスタイル */
+.nav-link.active {
+  font-weight: bold;
+}
+
+.top-screen, .setting-screen, .game {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.location-weather-info {
+  margin-bottom: 20px;
+}
+
+.link-button, .setting-button, .toggle-button, .jump-button {
+  display: block;
+  width: 200px;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.app-container {
+  padding: 20px;
+}
+
+.square {
+  background-color: #fff;
+  border: 2px solid #999;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 54px;
+  width: 54px;
+  margin: 2px;
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.square:hover {
+  background-color: #f0f0f0;
+}
+
+/* 盤の行のスタイル */
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+/* ゲーム全体のスタイル */
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+/* ゲーム情報のスタイル */
+.game-info {
+  margin-left: 20px;
+}
+
+/* フッターのスタイル */
+.footer {
+  background-color: aqua;
+  padding: 10px 0;
+}
