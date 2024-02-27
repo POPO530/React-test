@@ -1,106 +1,85 @@
-import React, { useState, useEffect } from 'react'; // Reactとそのhooksをインポートします。
+import React, { useState, useEffect } from 'react';
 
-// Kujiコンポーネントを定義します。
 function Kuji() {
-  // box: くじの箱の状態を保持する配列
-  const [box, setBox] = useState([]); 
-  // selectedCount: ユーザーが選択したくじの枚数
-  const [selectedCount, setSelectedCount] = useState(0); 
-  // drawResult: 抽選結果を格納する配列
-  const [drawResult, setDrawResult] = useState([]); 
-  // revealed: くじが明かされたかの状態を保持する配列
+  const [box, setBox] = useState([]);
+  const [selectedCount, setSelectedCount] = useState(0);
+  const [drawResult, setDrawResult] = useState([]);
+  const [tempResults, setTempResults] = useState([]);
   const [revealed, setRevealed] = useState([]);
-  // allRevealed: くじが全て明かされたかどうかを示す状態
-  const [allRevealed, setAllRevealed] = useState(false); 
-  // remainingTickets: 残りのくじの枚数
-  const [remainingTickets, setRemainingTickets] = useState(80); 
-  // prizeCounts: 各賞品の残り枚数をオブジェクトで管理
-  const [prizeCounts, setPrizeCounts] = useState({ 
+  const [remainingTickets, setRemainingTickets] = useState(80);
+  const [prizeCounts, setPrizeCounts] = useState({
     A: 1, B: 1, C: 1, D: 1, E: 1, F: 15, G: 15, H: 15, I: 15, J: 15
   });
 
-  // コンポーネントがマウントされた後に実行される副作用です。
   useEffect(() => {
-    resetGame(); // コンポーネントの初期化時にゲームをリセットする関数を呼び出します。
-  }, []); // 空の依存配列を渡すことで、コンポーネントのマウント時にのみ実行されます。
+    resetGame();
+  }, []);
 
-  // 配列をシャッフルする関数です。
   const shuffle = (array) => {
-    for (let i = array.length - 1; i > 0; i--) { // 配列の末尾から開始して最初の要素に向かってループします。
-      const j = Math.floor(Math.random() * (i + 1)); // 0からiまでのランダムなインデックスを選びます。
-      [array[i], array[j]] = [array[j], array[i]]; // 現在の要素とランダムに選んだ要素の位置を交換します。
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
-    return array; // シャッフルされた配列を返します。
+    return array;
   };
 
-  // くじを引く関数です。
   const drawTickets = () => {
-    const updatedBox = [...box]; // 現在のくじ箱の状態をコピーします。
-    const result = []; // 抽選結果を格納するための空配列を作成します。
-    for (let i = 0; i < selectedCount; i++) { // 選択された回数分だけループします。
-      if (updatedBox.length > 0) { // まだくじが箱にある場合にのみ処理を行います。
-        const ticket = updatedBox.pop(); // くじ箱から一枚取り出します。
-        result.push(ticket); // 取り出したくじを結果配列に追加します。
-        // 賞品カウントを更新するための状態更新関数を呼び出します。
-        setPrizeCounts(prevCounts => ({ ...prevCounts, [ticket]: prevCounts[ticket] - 1 })); 
-      }
+    const updatedBox = [...box];
+    const results = [];
+    for (let i = 0; i < Math.min(selectedCount, updatedBox.length); i++) {
+        const ticketIndex = Math.floor(Math.random() * updatedBox.length);
+        const ticket = updatedBox.splice(ticketIndex, 1)[0];
+        results.push(ticket);
     }
-    // 残りのくじの数を更新します。
-    setRemainingTickets(prevRemainingTickets => prevRemainingTickets - selectedCount); 
-    setDrawResult(result); // 抽選結果の状態を更新します。
-    setBox(updatedBox); // くじ箱の状態を更新します。
-    // 選択されたくじの数に応じた長さの配列を作成し、全ての要素をfalseで初期化します。
-    setRevealed(new Array(selectedCount).fill(false)); 
-    // くじを引いたら、賞の残り数を非表示にする
-    setAllRevealed(false);
+    setRemainingTickets(prevRemainingTickets => prevRemainingTickets - results.length);
+    setBox(updatedBox);
+    setRevealed(new Array(results.length).fill(false));
+    setTempResults(results);
+    setDrawResult(new Array(results.length).fill('未開封'));
   };
 
-  // ゲームをリセットする関数です。
   const resetGame = () => {
-    const initialBox = []; // 初期状態のくじ箱を表す空配列を作成します。
-    // 各賞品の枚数を定義したオブジェクトです。
     const frequencies = {
-      "A": 1, "B": 1, "C": 1, "D": 1, "E": 1, "F": 15, "G": 15, "H": 15, "I": 15, "J": 15
+      A: 1, B: 1, C: 1, D: 1, E: 1, F: 15, G: 15, H: 15, I: 15, J: 15
     };
 
-    // frequenciesオブジェクトの各エントリについてループします。
+    let initialBox = [];
     Object.entries(frequencies).forEach(([char, count]) => {
-      for (let i = 0; i < count; i++) { // 各賞品の枚数分だけループします。
-        initialBox.push(char); // くじ箱に賞品を表す文字を追加します。
+      for (let i = 0; i < count; i++) {
+        initialBox.push(char);
       }
     });
 
-    setBox(shuffle(initialBox)); // くじ箱をシャッフルして状態を更新します。
-    setSelectedCount(0); // 選択されたくじの数を0にリセットします。
-    setDrawResult([]); // 抽選結果の状態を空配列にリセットします。
-    setRevealed([]); // くじのめくれた状態を空配列にリセットします。
-    setAllRevealed(false); // 賞の残り数を非表示にする
-    setRemainingTickets(initialBox.length); // 残りのくじの数を初期状態にリセットします。
-    setPrizeCounts({ ...frequencies }); // 各賞品の数を初期状態にリセットします。
+    setBox(shuffle(initialBox));
+    setSelectedCount(0);
+    setDrawResult([]);
+    setRevealed([]);
+    setRemainingTickets(initialBox.length);
+    setPrizeCounts({ ...frequencies });
   };
 
-  // くじをめくる処理をする関数です。
   const revealTicket = (index) => {
-    // setRevealedを呼び出して、指定されたindexの位置のくじのみをめくるようにします。
-    // 既にめくられたくじはそのままにし、指定されたindexのくじだけ状態を更新します。
-    setRevealed(revealed.map((r, i) => i === index ? true : r));
-    // 全てのくじがめくられたかチェック
-    const newRevealed = revealed.map((r, i) => i === index ? true : r);
+    const newRevealed = [...revealed];
+    newRevealed[index] = true;
     setRevealed(newRevealed);
-    setAllRevealed(newRevealed.every(Boolean));
+
+    const newDrawResult = [...drawResult];
+    newDrawResult[index] = tempResults[index];
+    setDrawResult(newDrawResult);
+
+    // 賞品の残り数を更新
+    const newPrizeCounts = { ...prizeCounts };
+    newPrizeCounts[tempResults[index]] -= 1;
+    setPrizeCounts(newPrizeCounts);
   };
 
-  // コンポーネントの描画部分です。
   return (
     <div>
-      {/* アプリケーションのタイトルを表示します。 */}
       <h1>一番くじアプリ</h1>
       <div>
-        {/* 残りのくじの枚数を表示します。 */}
         <h2>残りのくじの枚数: {remainingTickets}枚</h2>
       </div>
       <div>
-        {/* くじを引く枚数を選択するための入力フィールドです。 */}
         <label htmlFor="ticketCount">引く枚数を選択してください（1から10枚まで）:</label>
         <input
           id="ticketCount"
@@ -108,46 +87,33 @@ function Kuji() {
           min="1"
           max="10"
           value={selectedCount}
-          // ユーザーが入力した値または残りのくじの枚数のうち小さい方を選択されたくじの枚数として設定します。
-          onChange={(e) => setSelectedCount(Math.min(parseInt(e.target.value, 10), remainingTickets))}
+          onChange={(e) => {
+            const val = Math.max(1, Math.min(10, parseInt(e.target.value, 10) || 0));
+            setSelectedCount(Math.min(val, remainingTickets));
+          }}
         />
       </div>
       <div>
-        {/* くじを引くためのボタンです。選択した枚数が適切でない場合は無効化されます。 */}
-        {/* 選択されたくじの枚数が1未満、または残りのくじの枚数を超えている場合、さらにくじが0枚の場合はボタンが無効化されます。 */}
         <button onClick={drawTickets} disabled={selectedCount < 1 || selectedCount > remainingTickets || remainingTickets === 0}>くじを引く</button>
-        {/* ゲームをリセットするボタンです。 */}
         <button onClick={resetGame}>リセット</button>
       </div>
       <div className="tickets-container">
-        {/* "tickets-container"クラスを持つdiv要素を開始します。このdivは、くじの結果を格納するコンテナとして機能します。 */}
         {drawResult.map((result, index) => (
-          // drawResult配列の各要素を反復処理します。ここでの`result`はくじの結果を、`index`はその要素のインデックスを表します。
-          <div
-            key={index} // 各子要素にユニークなkeyを割り当てます。これはReactが要素の識別を行うために使用します。
-            className={`ticket ${revealed[index] ? 'revealed' : ''}`} // 条件に応じてスタイルクラスを動的に適用します。もし`revealed[index]`が`true`ならば'revealed'クラスを適用し、そうでなければ適用しません。
-            onClick={() => revealTicket(index)} // クリックイベントに対して`revealTicket`関数を呼び出し、その時の`index`を渡します。これにより、クリックされたくじがめくられます。
-            data-content={result} // `data-content`属性にくじの結果`result`を格納します。これは後でCSSやJavaScriptで参照するために使用されることがあります。
-          >
-            {revealed[index] ? result : 'くじ'}
+          <div key={index} style={{ margin: '10px', padding: '10px', border: '1px solid #ccc', display: 'inline-block' }}>
+            {revealed[index] ? result : <button onClick={() => revealTicket(index)}>くじをめくる</button>}
           </div>
         ))}
       </div>
       <div>
-        {allRevealed && (
-          <div>
-            {/* 各賞品の残り枚数を表示 */}
-            <h2>賞品の残り数:</h2>
-            <ul>
-              {Object.entries(prizeCounts).map(([prize, count]) => (
-                <li key={prize}>{`賞品${prize}: 残り${count}枚`}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <h2>賞品の残り数:</h2>
+        <ul>
+          {Object.entries(prizeCounts).map(([prize, count]) => (
+            <li key={prize}>{`賞品${prize}: 残り${count}枚`}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
 
-export default Kuji; // Kujiコンポーネントをエクスポートします。
+export default Kuji;
