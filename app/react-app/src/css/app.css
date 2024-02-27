@@ -111,6 +111,60 @@
   margin-left: 20px; /* 左側のマージン */
 }
 
+/* くじを表示するコンテナのスタイル定義 */
+.tickets-container {
+  display: flex; /* フレックスボックスとして表示 */
+  flex-wrap: wrap; /* コンテンツがコンテナを超えたら折り返し */
+  gap: 10px; /* くじ間の間隔 */
+  margin-top: 20px; /* コンテナの上部のマージン */
+}
+
+/* 個々のくじのスタイル定義 */
+.ticket {
+  width: 60px; /* くじの幅 */
+  height: 100px; /* くじの高さ */
+  background-color: #f0f0f0; /* くじの背景色 */
+  display: flex; /* フレックスボックスとして表示 */
+  justify-content: center; /* 中央に内容を配置 */
+  align-items: center; /* アイテムを縦方向の中央に配置 */
+  cursor: pointer; /* ホバー時にポインター形状に変更 */
+  transition: transform 0.3s ease-in-out; /* 変形にかける時間とイージング */
+  transform-style: preserve-3d; /* 3D変形を有効に */
+  margin-bottom: 10px; /* 下部のマージン */
+}
+
+/* くじがめくられた状態のスタイル */
+.ticket.revealed {
+  transform: rotateY(180deg); /* Y軸を中心に180度回転 */
+}
+
+/* くじの表面のスタイル定義 */
+.ticket::before {
+  content: 'くじ'; /* 内容に「くじ」と表示 */
+  position: absolute; /* 絶対位置 */
+  width: 100%; /* 親要素と同じ幅 */
+  height: 100%; /* 親要素と同じ高さ */
+  backface-visibility: hidden; /* 裏面は非表示に */
+  display: flex; /* フレックスボックスとして表示 */
+  justify-content: center; /* 中央に内容を配置 */
+  align-items: center; /* アイテムを縦方向の中央に配置 */
+  background-color: #d0d0d0; /* 背景色 */
+}
+
+/* くじの裏面のスタイル定義 */
+.ticket::after {
+  content: attr(data-content); /* 属性'data-content'の内容を表示 */
+  position: absolute; /* 絶対位置 */
+  width: 100%; /* 親要素と同じ幅 */
+  height: 100%; /* 親要素と同じ高さ */
+  transform: rotateY(180deg); /* Y軸を中心に180度回転 */
+  backface-visibility: hidden; /* 裏面は非表示に */
+  display: flex; /* フレックスボックスとして表示 */
+  justify-content: center; /* 中央に内容を配置 */
+  align-items: center; /* アイテムを縦方向の中央に配置 */
+  background-color: #e0e0e0; /* 背景色 */
+}
+
 /* フッターのスタイル */
 .footer {
   background-color: aqua; /* 背景色 */
