@@ -125,13 +125,6 @@ function Kuji() {
         ))}
       </div>
       <div>
-        {/* 引いたくじの結果をリスト表示します。 */}
-        <h2>引いたくじの結果</h2>
-        {drawResult.map((result, index) => (
-          <p key={index}>当選内容: <span>{result}</span></p> // 各くじの結果をpタグで表示します。
-        ))}
-      </div>
-      <div>
         {/* 各賞品の残り枚数をリスト表示します。 */}
         <h2>賞の残り数</h2>
         <ul>
