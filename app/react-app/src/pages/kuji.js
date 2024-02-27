@@ -48,8 +48,8 @@ function Kuji() {
     const updatedBox = [...box];
     // 引かれたチケットを格納するための空配列を用意します
     const results = [];
-    // 選択された回数または箱に残っているチケットの数、どちらか少ない方の回数分だけ繰り返します
-    for (let i = 0; i < Math.min(selectedCount, updatedBox.length); i++) {
+    // 選択された回数分だけ繰り返します
+    for (let i = 0; i < selectedCount; i++) {
       // ランダムにチケットのインデックスを選びます
       const ticketIndex = Math.floor(Math.random() * updatedBox.length);
       // 選んだチケットを箱から取り出して変数に格納します
