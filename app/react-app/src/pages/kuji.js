@@ -9,7 +9,9 @@ function Kuji() {
   // drawResult: 抽選結果を格納する配列
   const [drawResult, setDrawResult] = useState([]); 
   // revealed: くじが明かされたかの状態を保持する配列
-  const [revealed, setRevealed] = useState([]); 
+  const [revealed, setRevealed] = useState([]);
+  // allRevealed: くじが全て明かされたかどうかを示す状態
+  const [allRevealed, setAllRevealed] = useState(false); 
   // remainingTickets: 残りのくじの枚数
   const [remainingTickets, setRemainingTickets] = useState(80); 
   // prizeCounts: 各賞品の残り枚数をオブジェクトで管理
@@ -49,6 +51,8 @@ function Kuji() {
     setBox(updatedBox); // くじ箱の状態を更新します。
     // 選択されたくじの数に応じた長さの配列を作成し、全ての要素をfalseで初期化します。
     setRevealed(new Array(selectedCount).fill(false)); 
+    // くじを引いたら、賞の残り数を非表示にする
+    setAllRevealed(false);
   };
 
   // ゲームをリセットする関数です。
@@ -79,6 +83,10 @@ function Kuji() {
     // setRevealedを呼び出して、指定されたindexの位置のくじのみをめくるようにします。
     // 既にめくられたくじはそのままにし、指定されたindexのくじだけ状態を更新します。
     setRevealed(revealed.map((r, i) => i === index ? true : r));
+    // 全てのくじがめくられたかチェック
+    const newRevealed = revealed.map((r, i) => i === index ? true : r);
+    setRevealed(newRevealed);
+    setAllRevealed(newRevealed.every(Boolean));
   };
 
   // コンポーネントの描画部分です。
@@ -125,14 +133,17 @@ function Kuji() {
         ))}
       </div>
       <div>
-        {/* 各賞品の残り枚数をリスト表示します。 */}
-        <h2>賞の残り数</h2>
-        <ul>
-          {/* prizeCountsオブジェクトの各エントリー（賞品とその数）をマッピングし、リスト表示します。 */}
-          {Object.entries(prizeCounts).map(([prize, count]) => (
-            <li key={prize}>{prize}: {count}枚</li> // 賞品名と残り枚数をliタグで表示します。
-          ))}
-        </ul>
+        {allRevealed && (
+          <div>
+            {/* 各賞品の残り枚数を表示 */}
+            <h2>賞品の残り数:</h2>
+            <ul>
+              {Object.entries(prizeCounts).map(([prize, count]) => (
+                <li key={prize}>{`賞品${prize}: 残り${count}枚`}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
