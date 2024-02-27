@@ -74,6 +74,7 @@ function Kuji() {
     setSelectedCount(0); // 選択されたくじの数を0にリセットします。
     setDrawResult([]); // 抽選結果の状態を空配列にリセットします。
     setRevealed([]); // くじのめくれた状態を空配列にリセットします。
+    setAllRevealed(false); // 賞の残り数を非表示にする
     setRemainingTickets(initialBox.length); // 残りのくじの数を初期状態にリセットします。
     setPrizeCounts({ ...frequencies }); // 各賞品の数を初期状態にリセットします。
   };
