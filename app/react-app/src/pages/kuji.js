@@ -77,6 +77,7 @@ function Kuji() {
   // くじをめくる処理をする関数です。
   const revealTicket = (index) => {
     // setRevealedを呼び出して、指定されたindexの位置のくじのみをめくるようにします。
+    // 既にめくられたくじはそのままにし、指定されたindexのくじだけ状態を更新します。
     setRevealed(revealed.map((r, i) => i === index ? true : r));
   };
 
@@ -98,24 +99,28 @@ function Kuji() {
           min="1"
           max="10"
           value={selectedCount}
+          // ユーザーが入力した値または残りのくじの枚数のうち小さい方を選択されたくじの枚数として設定します。
           onChange={(e) => setSelectedCount(Math.min(parseInt(e.target.value, 10), remainingTickets))}
         />
       </div>
       <div>
         {/* くじを引くためのボタンです。選択した枚数が適切でない場合は無効化されます。 */}
+        {/* 選択されたくじの枚数が1未満、または残りのくじの枚数を超えている場合、さらにくじが0枚の場合はボタンが無効化されます。 */}
         <button onClick={drawTickets} disabled={selectedCount < 1 || selectedCount > remainingTickets || remainingTickets === 0}>くじを引く</button>
         {/* ゲームをリセットするボタンです。 */}
         <button onClick={resetGame}>リセット</button>
       </div>
       <div className="tickets-container">
-        {/* drawResult配列をマッピングして、くじの結果を表示するためのdivを生成します。 */}
+        {/* "tickets-container"クラスを持つdiv要素を開始します。このdivは、くじの結果を格納するコンテナとして機能します。 */}
         {drawResult.map((result, index) => (
-          <div 
-            key={index} // Reactのリストレンダリングのためのユニークなキー
-            className={`ticket ${revealed[index] ? 'revealed' : ''}`} // くじがめくられたかどうかでクラスを切り替えます。
-            onClick={() => revealTicket(index)} // クリックするとrevealTicket関数が呼ばれます。
+          // drawResult配列の各要素を反復処理します。ここでの`result`はくじの結果を、`index`はその要素のインデックスを表します。
+          <div
+            key={index} // 各子要素にユニークなkeyを割り当てます。これはReactが要素の識別を行うために使用します。
+            className={`ticket ${revealed[index] ? 'revealed' : ''}`} // 条件に応じてスタイルクラスを動的に適用します。もし`revealed[index]`が`true`ならば'revealed'クラスを適用し、そうでなければ適用しません。
+            onClick={() => revealTicket(index)} // クリックイベントに対して`revealTicket`関数を呼び出し、その時の`index`を渡します。これにより、クリックされたくじがめくられます。
+            data-content={result} // `data-content`属性にくじの結果`result`を格納します。これは後でCSSやJavaScriptで参照するために使用されることがあります。
           >
-            {revealed[index] ? result : 'くじ'} {/* くじがめくられていれば結果を、そうでなければ'くじ'と表示します。 */}
+            {revealed[index] ? result : 'くじ'}
           </div>
         ))}
       </div>
@@ -123,15 +128,16 @@ function Kuji() {
         {/* 引いたくじの結果をリスト表示します。 */}
         <h2>引いたくじの結果</h2>
         {drawResult.map((result, index) => (
-          <p key={index}>当選内容: <span>{result}</span></p> // 各くじの結果を表示します。
+          <p key={index}>当選内容: <span>{result}</span></p> // 各くじの結果をpタグで表示します。
         ))}
       </div>
       <div>
         {/* 各賞品の残り枚数をリスト表示します。 */}
         <h2>賞の残り数</h2>
         <ul>
+          {/* prizeCountsオブジェクトの各エントリー（賞品とその数）をマッピングし、リスト表示します。 */}
           {Object.entries(prizeCounts).map(([prize, count]) => (
-            <li key={prize}>{prize}: {count}枚</li> // 賞品ごとの残り枚数を表示します。
+            <li key={prize}>{prize}: {count}枚</li> // 賞品名と残り枚数をliタグで表示します。
           ))}
         </ul>
       </div>
