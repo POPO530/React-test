@@ -1,4 +1,3 @@
-// Item.js
 import * as THREE from 'three';
 
 const itemCount = 30;
@@ -25,7 +24,7 @@ const getWallBox = (wall) => {
 const createItem = (scene, walls, pacManPosition) => {
   const itemGeometry = new THREE.BoxGeometry(itemSize, itemSize, itemSize);
   const itemMaterial = new THREE.MeshBasicMaterial({ color: 'red' });
-  const items = [];
+  let items = []; // 修正：items配列を関数の最初で宣言
 
   while (items.length < itemCount) {
     const randomPosition = new THREE.Vector3(
@@ -47,11 +46,11 @@ const createItem = (scene, walls, pacManPosition) => {
       const itemMesh = new THREE.Mesh(itemGeometry, itemMaterial);
       itemMesh.position.copy(randomPosition);
       scene.add(itemMesh);
-      items.push(itemMesh);
+      items.push(itemMesh); // 修正：生成されたアイテムを配列に追加
     }
   }
 
-  return items;
+  return items; // 修正：生成されたアイテムの配列を返す
 };
 
 export default createItem;
