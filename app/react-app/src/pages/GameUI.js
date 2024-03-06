@@ -1,17 +1,18 @@
+// Reactをインポート
 import React from 'react';
 
-// ゲームUIコンポーネントの定義
+// GameUIコンポーネントの定義。propsから残りのアイテム数(remainingItems)とゲームクリアの状態(gameCleared)を受け取る
 const GameUI = ({ remainingItems, gameCleared }) => {
-  // JSX を返してゲームUIコンポーネントをレンダリング
+  // コンポーネントがレンダリングするJSXを返す
   return (
     <div>
-      {/* 残りのアイテム数を表示 */}
+      {/* 残りのアイテム数を表示。remainingItems変数の値を動的に埋め込む */}
       <div>残りのアイテム数: {remainingItems}</div>
-      {/* ゲームがクリアされた場合、クリアメッセージを表示 */}
+      {/* gameClearedがtrueの場合、つまりゲームがクリアされた場合に表示されるメッセージ */}
       {gameCleared && <div>ゲームクリア！おめでとうございます！</div>}
     </div>
   );
 };
 
-// ゲームUIコンポーネントをエクスポート
+// GameUIコンポーネントをエクスポートすることで、他のファイルからimportして使えるようにする
 export default GameUI;
