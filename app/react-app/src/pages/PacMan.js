@@ -20,7 +20,7 @@ const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition }) => {
     // createMazeWalls関数を使用して迷路の壁を作成し、walls.currentに格納
     walls.current = createMazeWalls(scene);
     // createItem関数を使用してアイテムを初期位置に配置し、その結果をinitialItemsに格納
-    const initialItems = createItem(scene, walls.current, position);
+    const initialItems = createItem(scene, walls.current, position, detectCollision);
     // setItemsを使用してアイテムの状態を更新
     setItems(initialItems);
     // setRemainingItemsを使用して残りのアイテム数を更新
