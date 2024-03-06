@@ -1,56 +1,48 @@
 import * as THREE from 'three';
 
 const itemCount = 30;
-const minDistance = 1; // パックマンの初期位置からの最小距離
 const itemSize = 0.2; // アイテムのサイズ
 
-// アイテムのBoundingBoxを計算する関数
-const getItemBox = (position) => {
-  const itemHalfSize = itemSize / 2;
-  const min = new THREE.Vector3(position.x - itemHalfSize, position.y - itemHalfSize, position.z - itemHalfSize);
-  const max = new THREE.Vector3(position.x + itemHalfSize, position.y + itemHalfSize, position.z + itemHalfSize);
-  return new THREE.Box3(min, max);
-};
+// 壁の内側にアイテムを配置するための位置を計算する関数
+const getRandomPositionInsideWalls = (walls) => {
+  // 壁の内側のエリアを計算
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  walls.forEach(wall => {
+    const wallX = wall.position.x;
+    const wallY = wall.position.y;
+    const width = wall.geometry.parameters.width;
+    const height = wall.geometry.parameters.height;
 
-// 壁のBoundingBoxを計算する関数
-const getWallBox = (wall) => {
-  const wallHalfSizeX = wall.geometry.parameters.width / 2;
-  const wallHalfSizeY = wall.geometry.parameters.height / 2;
-  const min = new THREE.Vector3(wall.position.x - wallHalfSizeX, wall.position.y - wallHalfSizeY, wall.position.z);
-  const max = new THREE.Vector3(wall.position.x + wallHalfSizeX, wall.position.y + wallHalfSizeY, wall.position.z);
-  return new THREE.Box3(min, max);
+    minX = Math.min(minX, wallX - width / 2);
+    maxX = Math.max(maxX, wallX + width / 2);
+    minY = Math.min(minY, wallY - height / 2);
+    maxY = Math.max(maxY, wallY + height / 2);
+  });
+
+  // ランダムな位置を壁の内側エリアから選択
+  const x = THREE.MathUtils.randFloat(minX + itemSize, maxX - itemSize);
+  const y = THREE.MathUtils.randFloat(minY + itemSize, maxY - itemSize);
+  return new THREE.Vector3(x, y, 0); // z軸はゲームフィールドに合わせて0
 };
 
 const createItem = (scene, walls, pacManPosition) => {
   const itemGeometry = new THREE.BoxGeometry(itemSize, itemSize, itemSize);
   const itemMaterial = new THREE.MeshBasicMaterial({ color: 'red' });
-  let items = []; // 修正：items配列を関数の最初で宣言
+  let items = [];
 
   while (items.length < itemCount) {
-    const randomPosition = new THREE.Vector3(
-      THREE.MathUtils.randFloatSpread(20),
-      THREE.MathUtils.randFloatSpread(20),
-      0
-    );
+    const randomPosition = getRandomPositionInsideWalls(walls);
 
-    const distanceToPacMan = randomPosition.distanceTo(new THREE.Vector3(...pacManPosition));
-    if (distanceToPacMan < minDistance) continue;
+    // パックマンの位置との距離を確認して、近すぎる場合は再試行
+    if (randomPosition.distanceTo(new THREE.Vector3(...pacManPosition)) < 2) continue;
 
-    const itemBox = getItemBox(randomPosition);
-    const isInsideAnyWall = walls.some(wall => {
-      const wallBox = getWallBox(wall);
-      return itemBox.intersectsBox(wallBox);
-    });
-
-    if (!isInsideAnyWall) {
-      const itemMesh = new THREE.Mesh(itemGeometry, itemMaterial);
-      itemMesh.position.copy(randomPosition);
-      scene.add(itemMesh);
-      items.push(itemMesh); // 修正：生成されたアイテムを配列に追加
-    }
+    const itemMesh = new THREE.Mesh(itemGeometry, itemMaterial);
+    itemMesh.position.copy(randomPosition);
+    scene.add(itemMesh);
+    items.push(itemMesh);
   }
 
-  return items; // 修正：生成されたアイテムの配列を返す
+  return items;
 };
 
 export default createItem;

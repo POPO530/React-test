@@ -4,18 +4,19 @@ import * as THREE from 'three';
 import { createMazeWalls, detectCollision } from './Maze';
 import createItem from './Item';
 
-const PacMan = () => {
+const PacMan = ({ setRemainingItems, setGameCleared }) => {
   const pacManRef = useRef();
   const [position, setPosition] = useState([0, 0, 0]);
   const { scene } = useThree();
   const walls = useRef([]);
-  const [collectedItems, setCollectedItems] = useState([]);
-  const itemsRef = useRef([]);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     walls.current = createMazeWalls(scene);
-    itemsRef.current = createItem(scene, walls.current, position);
-  }, [scene]);
+    const initialItems = createItem(scene, walls.current, position);
+    setItems(initialItems);
+    setRemainingItems(initialItems.length);
+  }, [scene, setRemainingItems]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -41,21 +42,24 @@ const PacMan = () => {
     pacManRef.current.position.set(...position);
 
     // アイテムとの衝突を検出して収集
-    itemsRef.current.forEach((item, index) => {
+    items.forEach((item, index) => {
       if (item && pacManRef.current.position.distanceTo(item.position) < 0.5) {
-        scene.remove(item); // アイテムをシーンから削除
-        itemsRef.current[index] = null; // 参照をnullに設定
-        setCollectedItems(prev => [...prev, item]); // 収集済みアイテムに追加
+        scene.remove(item);
+        items[index] = null;
+        setItems(currentItems => {
+          const updatedItems = [...currentItems];
+          updatedItems[index] = null;
+          return updatedItems;
+        });
+        setRemainingItems(current => current - 1);
       }
     });
-  });
 
-  useEffect(() => {
-    if (collectedItems.length === 30) {
-      // すべてのアイテムを収集したらアラートを表示
-      alert("ゲームクリア！");
+    // ゲームクリアのチェック
+    if (items.filter(Boolean).length === 0) {
+      setGameCleared(true);
     }
-  }, [collectedItems]);
+  });
 
   // パックマンの形状を作成
   const createPacMan = () => {
@@ -64,9 +68,7 @@ const PacMan = () => {
     return new THREE.Mesh(geometry, material);
   };
 
-  return (
-    <primitive object={createPacMan()} ref={pacManRef} position={position} />
-  );
+  return <primitive object={createPacMan()} ref={pacManRef} position={position} />;
 };
 
 export default PacMan;
