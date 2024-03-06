@@ -1,11 +1,11 @@
 import React, { useState } from 'react'; // ReactとuseStateフックをインポート
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // ブラウザルーター、ルート、およびルートのインポート
-import Header from './pages/header'; // Headerページのコンポーネントをインポート
-import Footer from './pages/footer'; // Footerページのコンポーネントをインポート
-import Top from './pages/top'; // Topページのコンポーネントをインポート
-import Setting from './pages/setting'; // Settingページのコンポーネントをインポート
-import Game from './pages/game'; // Gameページのコンポーネントをインポート
-import Kuji from './pages/kuji'; // Kujiページのコンポーネントをインポート
+import Header from './pages/Header'; // Headerページのコンポーネントをインポート
+import Footer from './pages/Footer'; // Footerページのコンポーネントをインポート
+import Top from './pages/Top'; // Topページのコンポーネントをインポート
+import Setting from './pages/Setting'; // Settingページのコンポーネントをインポート
+import Game from './pages/Game'; // Gameページのコンポーネントをインポート
+import Kuji from './pages/Kuji'; // Kujiページのコンポーネントをインポート
 import './css/app.css'; // アプリケーションのCSSスタイルをインポート
 
 function App() {

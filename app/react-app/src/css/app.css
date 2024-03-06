@@ -38,7 +38,7 @@
 }
 
 /* トップ画面、設定画面、ゲーム画面のスタイル */
-.top-screen, .setting-screen, .game {
+.top-screen, .setting-screen {
   background-color: #f0f0f0; /* 背景色 */
   padding: 20px; /* 内側の余白 */
 }
@@ -48,7 +48,7 @@
 }
 
 /* ボタンのスタイル */
-.link-button, .setting-button, .toggle-button, .jump-button {
+.link-button {
   display: block; /* ブロック要素として表示 */
   width: 200px; /* 幅 */
   padding: 10px; /* パディング */
@@ -64,7 +64,7 @@
 }
 
 /* ボタンがホバーされたときの背景色を変更 */
-.link-button:hover, .setting-button:hover, .toggle-button:hover, .jump-button:hover {
+.link-button:hover {
   background-color: #0056b3;
 }
 
@@ -72,43 +72,6 @@
 /* アプリケーションコンテナのスタイル */
 .app-container {
   padding: 20px; /* 内側の余白 */
-}
-
-/* 四角形のスタイル */
-.square {
-  background-color: #fff; /* 背景色 */
-  border: 2px solid #999; /* 枠線 */
-  color: #333; /* テキスト色 */
-  font-size: 24px; /* フォントサイズ */
-  font-weight: bold; /* フォントの太さ */
-  line-height: 34px; /* 行の高さ */
-  height: 54px; /* 高さ */
-  width: 54px; /* 幅 */
-  margin: 2px; /* マージン */
-  padding: 0; /* パディング */
-  text-align: center; /* テキストの中央揃え */
-  cursor: pointer; /* マウスオーバー時のカーソル */
-  transition: background-color 0.3s ease; /* 背景色の変化をアニメーション */
-}
-
-.square:focus {
-  outline: none; /* フォーカス時の枠線を消す */
-}
-
-.square:hover {
-  background-color: #f0f0f0; /* マウスホバー時の背景色 */
-}
-
-/* 盤の行のスタイル */
-.board-row:after {
-  clear: both; /* 浮動解除 */
-  content: ""; /* コンテンツなし */
-  display: table; /* テーブルとして表示 */
-}
-
-/* ゲーム情報のスタイル */
-.game-info {
-  margin-left: 20px; /* 左側のマージン */
 }
 
 /* くじを表示するコンテナのスタイル定義 */
@@ -164,6 +127,18 @@
   align-items: center; /* アイテムを縦方向の中央に配置 */
   background-color: #e0e0e0; /* 背景色 */
 }
+
+.game-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #282c34; /* ゲームの背景色を暗めの色に設定 */
+  color: white; /* テキスト色を白に設定 */
+}
+
+
 
 /* フッターのスタイル */
 .footer {
