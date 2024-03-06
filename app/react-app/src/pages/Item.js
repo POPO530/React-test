@@ -1,61 +1,60 @@
-// three.jsライブラリをインポート
 import * as THREE from 'three';
 
-// アイテムの総数を定義
-const itemCount = 30;
-// 各アイテムのサイズを定義
-const itemSize = 0.2;
-
-// 壁の内側にアイテムを配置するためのランダムな位置を計算する関数
-const getRandomPositionInsideWalls = (walls) => {
-  // 壁に囲まれたエリアの最小および最大のX,Y座標を初期化
+// アイテムを壁の内側に配置するためのランダムな位置を計算する関数
+const getRandomPositionInsideWalls = (walls, detectCollision) => {
+  // 壁の外側領域の最小値と最大値を初期化
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-  // 各壁オブジェクトに対して処理を行い、エリアのサイズを計算
+
+  // 全ての壁オブジェクトに対してループ
   walls.forEach(wall => {
+    // 壁の位置を取得
     const wallX = wall.position.x;
     const wallY = wall.position.y;
+    // 壁の幅と高さを取得
     const width = wall.geometry.parameters.width;
     const height = wall.geometry.parameters.height;
 
+    // 壁の範囲を基に最小値と最大値を更新
     minX = Math.min(minX, wallX - width / 2);
     maxX = Math.max(maxX, wallX + width / 2);
     minY = Math.min(minY, wallY - height / 2);
     maxY = Math.max(maxY, wallY + height / 2);
   });
 
-  // 計算されたエリア内でランダムな位置を生成
-  const x = THREE.MathUtils.randFloat(minX + itemSize, maxX - itemSize);
-  const y = THREE.MathUtils.randFloat(minY + itemSize, maxY - itemSize);
-  // 生成した位置情報をもとに3D空間上の位置ベクトルを返す（Z座標は0とする）
-  return new THREE.Vector3(x, y, 0);
+  let position;
+  const itemSize = 0.5; // アイテムのサイズを仮定
+  do {
+    // ランダムなX,Y座標を計算（アイテムが壁に収まるようにする）
+    const x = THREE.MathUtils.randFloat(minX + itemSize, maxX - itemSize);
+    const y = THREE.MathUtils.randFloat(minY + itemSize, maxY - itemSize);
+    position = [x, y, 0]; // Z座標は0とする
+  } while (detectCollision(position, walls)); // 計算された位置が壁と衝突しないことを確認
+
+  return new THREE.Vector3(...position); // 3Dベクトルとして位置を返す
 };
 
-// シーンにアイテムを生成して配置する関数
-const createItem = (scene, walls, pacManPosition) => {
-  // アイテムの形状(ジオメトリ)と材質(マテリアル)を定義
-  const itemGeometry = new THREE.BoxGeometry(itemSize, itemSize, itemSize);
-  const itemMaterial = new THREE.MeshBasicMaterial({ color: 'red' });
-  let items = [];
+// アイテムを作成する関数
+const createItem = (scene, walls, pacmanPosition, detectCollision) => {
+  const items = []; // 生成されたアイテムを格納する配列
+  const numItems = 10; // 生成するアイテムの数
 
-  // itemCountの数だけアイテムを生成する
-  while (items.length < itemCount) {
-    // 壁の内側にあるランダムな位置を取得
-    const randomPosition = getRandomPositionInsideWalls(walls);
-
-    // 生成した位置がパックマンの初期位置から一定距離以上離れているか確認
-    if (randomPosition.distanceTo(new THREE.Vector3(...pacManPosition)) < 2) continue;
-
-    // 条件を満たした場合、アイテムのメッシュ(3Dオブジェクト)を生成し、シーンに追加
-    const itemMesh = new THREE.Mesh(itemGeometry, itemMaterial);
-    itemMesh.position.copy(randomPosition);
-    scene.add(itemMesh);
-    // アイテムリストに追加
-    items.push(itemMesh);
+  // 指定された数のアイテムを生成
+  for (let i = 0; i < numItems; i++) {
+    // アイテムの位置を計算
+    const position = getRandomPositionInsideWalls(walls, detectCollision);
+    
+    // アイテム（球体）のジオメトリとマテリアルを作成
+    const geometry = new THREE.SphereGeometry(0.2, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // 緑色で設定
+    const item = new THREE.Mesh(geometry, material); // メッシュを作成
+    item.position.set(position.x, position.y, position.z); // アイテムの位置を設定
+    
+    // アイテムをシーンに追加
+    scene.add(item);
+    items.push(item); // アイテム配列に追加
   }
 
-  // 生成された全アイテムのリストを返す
-  return items;
+  return items; // 生成されたアイテムの配列を返す
 };
 
-// createItem関数をエクスポート
 export default createItem;
