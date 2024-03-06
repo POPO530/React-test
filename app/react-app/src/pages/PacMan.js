@@ -74,7 +74,7 @@ const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition }) => {
 
     // 弾の移動
     if (bulletPosition) {
-      const bulletSpeed = 0.05; // 弾の速度
+      const bulletSpeed = 0.2; // 弾の速度
       const newPos = bulletPosition.map((val, index) => val + bulletDirection[index] * bulletSpeed);
       setBulletPosition(newPos);
 

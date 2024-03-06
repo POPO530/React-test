@@ -3,49 +3,45 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 const Enemy = ({ pacManPosition, bulletPosition }) => {
-  const enemyRef = useRef(null);
-  const [isAlive, setIsAlive] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
+  const enemyRef = useRef();
 
   useEffect(() => {
-    // 敵キャラクターの Mesh を作成
+    // 敵キャラクターの Mesh を作成して ref に割り当て
     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
     const material = new THREE.MeshBasicMaterial({ color: 'purple' });
     enemyRef.current = new THREE.Mesh(geometry, material);
 
-    // パックマンの位置から少し離れた位置にエネミーを配置する
-    enemyRef.current.position.x = pacManPosition[0] + 3; // X軸に3ユニット離れる
-    enemyRef.current.position.y = pacManPosition[1] + 3; // Y軸に3ユニット離れる
+    // ここでは enemyRef.current を直接シーンに追加しないでください。
+    // この操作は <primitive> コンポーネント内で行われます。
   }, []); // 依存配列を空にしてマウント時のみ実行
 
-  useFrame(() => {
-    if (!enemyRef.current || !isAlive) return;
-    
+  useFrame(({ scene }) => {
+    // enemyRef.current が存在するかをチェック
+    if (!enemyRef.current || !isVisible) return;
+
+    // パックマンの位置を THREE.Vector3 で表現
     const pacManPosVec = new THREE.Vector3(...pacManPosition);
     const enemyPos = enemyRef.current.position;
     const direction = new THREE.Vector3().subVectors(pacManPosVec, enemyPos).normalize();
-    
-    // スピードをさらに遅くする
+
+    // スピードを調整
     const speed = 0.01;
     enemyPos.add(direction.multiplyScalar(speed));
 
-    // 弾との衝突検出
-    if (bulletPosition) {
-      const enemyPos = enemyRef.current.position;
+    // 弾との衝突判定
+    if (bulletPosition && isVisible) {
       const bulletPosVec = new THREE.Vector3(...bulletPosition);
-      if (bulletPosVec.distanceTo(enemyPos) < 0.5) { // 衝突判定の範囲を設定
-        setIsAlive(false); // 敵を消滅させる
-        enemyRef.current.visible = false; // 敵を非表示にする
+      if (bulletPosVec.distanceTo(enemyPos) < 0.5) {
+        setIsVisible(false); // 敵を非表示にする
+        // ここで、必要に応じて enemyRef.current をシーンから削除することもできます
+        // scene.remove(enemyRef.current);
       }
     }
   });
 
-  if (!isAlive || !enemyRef.current) {
-    // enemyRef.currentが未定義の場合は何もレンダリングしない
-    return null;
-  }
-
-  // enemyRef.currentが有効ならレンダリングする
-  return <primitive object={enemyRef.current} />;
+  // isVisible 状態に基づいて enemyRef.current を条件付きでレンダリング
+  return isVisible && enemyRef.current ? <primitive object={enemyRef.current} /> : null;
 };
 
 export default Enemy;
