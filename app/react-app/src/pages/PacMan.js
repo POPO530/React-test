@@ -20,11 +20,18 @@ const PacMan = () => {
   // useRef フックを使用して、迷路の壁の参照を保持します。
   const walls = useRef([]);
 
+  // useEffect フックを使用して、特定の副作用（この場合は迷路の壁の作成とアイテムの生成）を実行します。
+  // この副作用は、依存配列（この例では [scene]）に含まれる値が変更されたとき、またはコンポーネントがマウントされたときに一度だけ実行されます。
   useEffect(() => {
+    // `createMazeWalls` 関数を呼び出して、シーンに迷路の壁を生成します。
+    // この関数は、生成された壁と迷路の境界を表すオブジェクトを返します。
     const { walls, mazeBounds } = createMazeWalls(scene);
     
-    createItem(scene, mazeBounds); // `walls.current` と `pacManPosition` 引数を削除
-  }, [scene]);
+    // `createItem` 関数を呼び出して、シーン内の迷路の境界内にアイテムを生成します。
+    // 以前のバージョンでは `walls.current` と `pacManPosition` を引数として渡していましたが、
+    // これらの引数が削除されているため、関数はただ `scene` と `mazeBounds` を引数として使用します。
+    createItem(scene, mazeBounds);
+  }, [scene]); // 依存配列に `scene` を指定しています。これにより、`scene` オブジェクトが変更されたときにのみ、この副作用が再実行されるようになります。
 
   // useEffect フックを使用して、キーボード入力に応じて Pac-Man の位置を更新するイベントリスナーを追加します。
   useEffect(() => {
