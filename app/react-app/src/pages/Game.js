@@ -16,7 +16,7 @@ const Game = () => {
   // ゲームがクリアされたかどうかを管理する状態
   const [gameCleared, setGameCleared] = useState(false);
   // 残りのアイテム数を管理する状態
-  const [remainingItems, setRemainingItems] = useState(30);
+  const [remainingItems, setRemainingItems] = useState(10);
   // パックマンの位置を管理する状態
   const [pacManPosition, setPacManPosition] = useState([0, 0, 0]);
 
@@ -24,14 +24,14 @@ const Game = () => {
   const startGame = () => {
     setGameStarted(true);
     setGameCleared(false);
-    setRemainingItems(30);
+    setRemainingItems(10);
   };
 
   // ゲームをリセットする関数
   const resetGame = () => {
     setGameStarted(false);
     setGameCleared(false);
-    setRemainingItems(30);
+    setRemainingItems(10);
     setPacManPosition([0, 0, 0]);
   };
 
