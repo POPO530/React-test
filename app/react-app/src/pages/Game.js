@@ -9,7 +9,6 @@ const Game = () => {
   const [gameCleared, setGameCleared] = useState(false);
   const [remainingItems, setRemainingItems] = useState(30);
   const [pacManPosition, setPacManPosition] = useState([0, 0, 0]);
-  const [bulletPosition, setBulletPosition] = useState(null);
 
   const startGame = () => {
     setGameStarted(true);
@@ -31,8 +30,8 @@ const Game = () => {
         <pointLight position={[10, 10, 10]} />
         {gameStarted && (
           <>
-            <PacMan setRemainingItems={setRemainingItems} setGameCleared={setGameCleared} setPacManPosition={setPacManPosition} setBulletPosition={setBulletPosition} />
-            <Enemy pacManPosition={pacManPosition} bulletPosition={bulletPosition} />
+            <PacMan setRemainingItems={setRemainingItems} setGameCleared={setGameCleared} setPacManPosition={setPacManPosition} />
+            <Enemy pacManPosition={pacManPosition} />
           </>
         )}
       </Canvas>
