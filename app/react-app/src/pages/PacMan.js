@@ -20,14 +20,10 @@ const PacMan = () => {
   // useRef フックを使用して、迷路の壁の参照を保持します。
   const walls = useRef([]);
 
-  // useEffect フックを使用して、コンポーネントがマウントされたときに一度だけ実行される処理を定義します。
   useEffect(() => {
-    // createMazeWalls 関数を呼び出して、シーンに迷路の壁を追加し、迷路の境界を取得します。
     const { walls, mazeBounds } = createMazeWalls(scene);
-    walls.current = walls;
-
-    // createItem 関数を呼び出して、シーンにアイテムを追加します。
-    createItem(scene, walls.current, [0, 0, 0], mazeBounds);
+    
+    createItem(scene, mazeBounds); // `walls.current` と `pacManPosition` 引数を削除
   }, [scene]);
 
   // useEffect フックを使用して、キーボード入力に応じて Pac-Man の位置を更新するイベントリスナーを追加します。
