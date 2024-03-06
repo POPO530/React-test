@@ -22,7 +22,7 @@ const Game = () => {
 
   return (
     <div className="game-container">
-      <Canvas>
+      <Canvas style={{ width: '70%', height: '70vh' }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         {gameStarted && <PacMan setRemainingItems={setRemainingItems} setGameCleared={setGameCleared} />}
