@@ -116,9 +116,13 @@ const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition, resetGam
     });
 
     // ゲームクリアの判定（全てのアイテムが収集された場合）
-    if (items.filter(Boolean).length === 0) {
+    if (items.filter(Boolean).length === 0 && items.length > 0) { // アイテムが0で、初期状態ではない場合
+      console.log("ゲームクリア！全てのアイテムが収集されました。"); // デバッグ情報を出力
       setGameCleared(true);
       resetGame(); // ゲームクリア時にリセット処理を自動で実行
+    } else {
+      // ゲーム進行中の状態をデバッグ出力
+      console.log(`残りのアイテム数: ${items.filter(Boolean).length}`);
     }
   });
 
