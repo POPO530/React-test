@@ -47,15 +47,13 @@ const Game = () => {
         {/* ゲームが開始されている場合、PacManとEnemyコンポーネントをレンダリング */}
         {gameStarted && (
           <>
-            <PacMan setRemainingItems={setRemainingItems} setGameCleared={setGameCleared} setPacManPosition={setPacManPosition} />
+            <PacMan setRemainingItems={setRemainingItems} setGameCleared={setGameCleared} setPacManPosition={setPacManPosition} resetGame={resetGame} />
             <Enemy pacManPosition={pacManPosition} />
           </>
         )}
       </Canvas>
       {/* ゲームが開始されていない場合、ゲーム開始ボタンを表示 */}
       {!gameStarted && <button className="game-button" onClick={startGame}>ゲーム開始</button>}
-      {/* ゲームがクリアされた場合、リセットボタンを表示 */}
-      {gameCleared && <button className="game-button" onClick={resetGame}>リセット</button>}
       {/* GameUIコンポーネントをレンダリングし、残りのアイテム数とゲームクリアの状態を渡す */}
       <GameUI remainingItems={remainingItems} gameCleared={gameCleared} />
     </div>

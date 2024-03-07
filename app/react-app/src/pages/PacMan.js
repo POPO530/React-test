@@ -6,7 +6,7 @@ import { createMazeWalls, detectCollision } from './Maze';
 import createItem from './Item';
 
 // PacManコンポーネントの定義。ゲーム状態を更新する関数をpropsから受け取る
-const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition }) => {
+const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition, resetGame }) => {
   const pacManRef = useRef(); // パックマンの3Dオブジェクトへの参照
   const [position, setPosition] = useState([0, 0, 0]); // パックマンの位置
   const [bulletPosition, setBulletPosition] = useState(null); // 弾の位置（初期状態では発射されていない）
@@ -118,6 +118,7 @@ const PacMan = ({ setRemainingItems, setGameCleared, setPacManPosition }) => {
     // ゲームクリアの判定（全てのアイテムが収集された場合）
     if (items.filter(Boolean).length === 0) {
       setGameCleared(true);
+      resetGame(); // ゲームクリア時にリセット処理を自動で実行
     }
   });
 
